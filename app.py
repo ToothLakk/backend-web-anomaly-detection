@@ -1,5 +1,5 @@
 import flask
-import dao
+from dao import dao
 from flask import request
 import logging
 app = flask.Flask(__name__)

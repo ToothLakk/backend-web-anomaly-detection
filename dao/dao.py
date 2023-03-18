@@ -1,4 +1,4 @@
-from mysqlConnection import mydb
+from config.mysqlConnection import mydb
 
 
 mycursor = mydb.cursor()
