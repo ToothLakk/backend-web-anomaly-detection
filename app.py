@@ -25,5 +25,7 @@ def insertTable1():
     result = dao.innsert_to_tb1(data['name'], data['age'])
     return result
 
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=1000)
+day la mot doan code loi
