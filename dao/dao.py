@@ -1,22 +1,187 @@
 from config.mysqlConnection import mydb
 
-
 mycursor = mydb.cursor()
 
-def get_dta_by_id(id):
-    mycursor.execute("SELECT * FROM table1 WHERE id =" + str(id))
+def addCamera(userid):
+    try:
+        mycursor.execute("INSERT INTO Camera(userid) VALUES ({})".format(userid))
+        mydb.commit()
 
+        return "Insert success"
+    except Exception:
+        print(Exception)
+        return "Insert fail"
+
+def getCameraById(id):
+    mycursor.execute("SELECT * FROM Camera WHERE CameraID =" + str(id))
     myresult = mycursor.fetchall()
 
     return myresult
 
-def innsert_to_tb1(name, age):
+def getCameraByUserId(userId):
+    mycursor.execute("SELECT * FROM Camera WHERE UserID =" + str(userId))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def deleteCamera(id):
     try:
-        print("INSERT INTO table1(name, age) VALUES ('{}', {})".format(name, age))
-        mycursor.execute("INSERT INTO table1(name, age) VALUES ('{}', {})".format(name, age))
+        mycursor.execute("DELETE from Camera WHERE CameraID =" + str(id))
         mydb.commit()
 
-        return "True"
+        return "Delete success"
     except Exception:
         print(Exception)
-        return "False"
+        return "Delete fail"
+
+def createEmail(userId, notificationId, email):
+    try:
+        mycursor.execute("INSERT INTO Email(UserID, NotificationId, Email) VALUES ({}, {}, '{}')".format(userId, notificationId, email))
+        mydb.commit()
+
+        return "Insert success"
+    except Exception:
+        print(Exception)
+        return "Insert fail"
+
+def getEmailById(id):
+    mycursor.execute("SELECT * FROM Email WHERE EmailID =" + str(id))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def getEmailByUserId(userId):
+    mycursor.execute("SELECT * FROM Email WHERE UserID =" + str(userId))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def createEvent(camId, message, datetime):
+    try:
+        mycursor.execute("INSERT INTO Event(CameraID, Message, datetime) VALUES ({}, '{}', '{}')".format(camId, message, datetime))
+        mydb.commit()
+
+        return "Insert success"
+    except Exception:
+        print(Exception)
+        return "Insert fail"
+
+def getEventById(id):
+    mycursor.execute("SELECT * FROM Event WHERE EventID =" + str(id))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def getEventByCamId(camId):
+    mycursor.execute("SELECT * FROM Event WHERE CameraID =" + str(camId))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def getAllHelp():
+    mycursor.execute("SELECT * FROM Help")
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def getHelpById(id):
+    mycursor.execute("SELECT * FROM Help WHERE HelpID =" + str(id))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def createCamHistory(camId, filePath, datatime):
+    try:
+        mycursor.execute("INSERT INTO CameraHistory(CameraID, FilePath, datetime) VALUES ({}, '{}', '{}')".format(camId, filePath, datatime))
+        mydb.commit()
+
+        return "Insert success"
+    except Exception:
+        print(Exception)
+        return "Insert fail"
+
+def getCamHistoryById(id):
+    mycursor.execute("SELECT * FROM CameraHistory WHERE CameraHistoryID =" + str(id))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def getCamHistoryByCamId(camId):
+    mycursor.execute("SELECT * FROM CameraHistory WHERE CameraID =" + str(camId))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def createNotification(camId, message, datetime):
+    try:
+        mycursor.execute("INSERT INTO Notification(CameraID, Message, datetime) VALUES ({}, '{}', '{}')".format(camId, message, datetime))
+        mydb.commit()
+
+        return "Insert success"
+    except Exception:
+        print(Exception)
+        return "Insert fail"
+
+def getNotificationById(id):
+    mycursor.execute("SELECT * FROM Notification WHERE NotificationID =" + str(id))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def getNotificationByCamId(camId):
+    mycursor.execute("SELECT * FROM Notification WHERE CameraID =" + str(camId))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def createUser(username, password, role):
+    try:
+        mycursor.execute("INSERT INTO User(UserName, Password, Role) VALUES ('{}', '{}', {})".format(username, password, role))
+        mydb.commit()
+
+        return "Insert success"
+    except Exception:
+        print(Exception)
+        return "Insert fail"
+
+def getUserById(id):
+    mycursor.execute("SELECT * FROM User WHERE UserID =" + str(id))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def getUserByUsername(username):
+    mycursor.execute("SELECT * FROM User WHERE UserName =" + str(username))
+    myresult = mycursor.fetchall()
+
+    return myresult
+
+def updateUsername(id, username):
+    try:
+        mycursor.execute("UPDATE User SET UserName = '{}' WHRERE UserID={}".format(username, id))
+        mydb.commit()
+
+        return "Update success"
+    except Exception:
+        print(Exception)
+        return "Update fail"
+
+def updateUserPassword(id, password):
+    try:
+        mycursor.execute("UPDATE User SET Password = '{}' WHRERE UserID={}".format(password, id))
+        mydb.commit()
+
+        return "Update success"
+    except Exception:
+        print(Exception)
+        return "Update fail"
+
+def deleteUser(id):
+    try:
+        mycursor.execute("DELETE from User WHERE UserID =" + str(id))
+        mydb.commit()
+
+        return "Delete success"
+    except Exception:
+        print(Exception)
+        return "Delete fail"
