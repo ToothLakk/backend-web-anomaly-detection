@@ -139,10 +139,10 @@ def createUser(id, username, password, role):
         mycursor.execute("INSERT INTO User(UserID, UserName, Password, Role) VALUES ('{}','{}', '{}', '{}')".format(id, username, password, role))
         mydb.commit()
 
-        return "Insert success"
+        return Response("Insert success", status=200, mimetype='application/json')
     except Exception:
         print(Exception)
-        return "Insert fail"
+        return Response("Insert fail", status=404, mimetype='application/json')
 
 def getUserById(id):
     mycursor.execute("SELECT * FROM user WHERE UserID =" + str(id))

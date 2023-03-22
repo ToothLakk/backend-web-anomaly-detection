@@ -66,6 +66,14 @@ def updateUserPassword():
     result = dao.updateUserPassword( data['password'], data['id'])
     return result
 
+# get all user
+@app.route('/get_all_user', methods=['POST'])
+def getAllUser():
+    data = request.get_json()
+    # app.logger.error('%s', type(data['rgb']))
+    result = dao.getUser()
+    return result
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=1000)
