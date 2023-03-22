@@ -1,5 +1,5 @@
 from config.mysqlConnection import mydb
-
+from flask import Response
 mycursor = mydb.cursor()
 
 def addCamera(userid):
@@ -134,9 +134,9 @@ def getNotificationByCamId(camId):
 
     return myresult
 
-def createUser(username, password, role):
+def createUser(id, username, password, role):
     try:
-        mycursor.execute("INSERT INTO User(UserName, Password, Role) VALUES ('{}', '{}', {})".format(username, password, role))
+        mycursor.execute("INSERT INTO User(UserID, UserName, Password, Role) VALUES ('{}','{}', '{}', '{}')".format(id, username, password, role))
         mydb.commit()
 
         return "Insert success"
@@ -145,36 +145,43 @@ def createUser(username, password, role):
         return "Insert fail"
 
 def getUserById(id):
-    mycursor.execute("SELECT * FROM User WHERE UserID =" + str(id))
+    mycursor.execute("SELECT * FROM user WHERE UserID =" + str(id))
     myresult = mycursor.fetchall()
 
+    return myresult
+
+def getUser():
+    mycursor.execute("SELECT * FROM User")
+    myresult = mycursor.fetchall()
     return myresult
 
 def getUserByUsername(username):
-    mycursor.execute("SELECT * FROM User WHERE UserName =" + str(username))
+    mycursor.execute("SELECT * FROM user WHERE UserName ='{}'".format(username))
     myresult = mycursor.fetchall()
 
     return myresult
 
-def updateUsername(id, username):
+def updateUsername(username, id):
     try:
-        mycursor.execute("UPDATE User SET UserName = '{}' WHRERE UserID={}".format(username, id))
+        mycursor.execute("UPDATE user SET UserName = '{}' WHERE UserID ='{}'".format(username, id))
         mydb.commit()
 
-        return "Update success"
+        #return "Update success"
+        return Response("Update success", status=200, mimetype='application/json')
     except Exception:
         print(Exception)
-        return "Update fail"
+        #return "Update fail"
+        return Response("Update fail", status=404, mimetype='application/json')
 
-def updateUserPassword(id, password):
+def updateUserPassword(password, id):
     try:
-        mycursor.execute("UPDATE User SET Password = '{}' WHRERE UserID={}".format(password, id))
+        mycursor.execute("UPDATE User SET PassWord = '{}' WHERE UserID= '{}'".format(password, id))
         mydb.commit()
 
-        return "Update success"
+        return Response("Update success", status=200, mimetype='application/json')
     except Exception:
         print(Exception)
-        return "Update fail"
+        return Response("Update fail", status=404, mimetype='application/json')
 
 def deleteUser(id):
     try:
