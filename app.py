@@ -7,10 +7,12 @@ app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 # Create some test data for our catalog in the form of a list of dictionaries.
 
+
 @app.route('/', methods=['POST', 'GET'])
 def home():
     return '''<h1>Anomaly detection</h1>
                 <p>A API for interact with MySQL server</p>'''
+
 
 @app.route('/selectTable1', methods=['POST'])
 def api_id():
@@ -19,6 +21,7 @@ def api_id():
     result = dao.get_dta_by_id(data['id'])
     return result
 
+
 @app.route('/insertTable1', methods=['POST'])
 def insertTable1():
     data = request.get_json()
@@ -26,13 +29,6 @@ def insertTable1():
     result = dao.innsert_to_tb1(data['name'], data['age'])
     return result
 
-# get user by id
-@app.route('/get_user_by_id', methods=['POST'])
-def getUserByID():
-    data = request.get_json()
-    # app.logger.error('%s', type(data['rgb']))
-    result = dao.getUserById(data['id'])
-    return result
 
 # get user by name
 @app.route('/get_user_by_name', methods=['POST'])

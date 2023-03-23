@@ -2,14 +2,14 @@ from config.mysqlConnection import mydb
 from flask import Response
 mycursor = mydb.cursor()
 
-def addCamera(userid):
+def addCamera(userid, cameraName):
     try:
-        mycursor.execute("INSERT INTO Camera(userid) VALUES ({})".format(userid))
+        mycursor.execute("INSERT INTO Camera(UserID, CameraName, delete_flag) VALUES ({}, '{}', {})".format(userid, cameraName, 0))
         mydb.commit()
 
         return "Insert success"
-    except Exception:
-        print(Exception)
+    except Exception as e:
+        print(e)
         return "Insert fail"
 
 def getCameraById(id):
@@ -24,15 +24,25 @@ def getCameraByUserId(userId):
 
     return myresult
 
-def deleteCamera(id):
+def updateCameraName(newName):
     try:
-        mycursor.execute("DELETE from Camera WHERE CameraID =" + str(id))
+        mycursor.execute("UPDATE Camera SET CameraName = {} WHERE CameraID = {}".format(newName, id))
         mydb.commit()
 
-        return "Delete success"
-    except Exception:
-        print(Exception)
-        return "Delete fail"
+        return "Update success"
+    except Exception as e:
+        print(e)
+        return "Update fail"
+
+def deleteCamera(id):
+    try:
+        mycursor.execute("UPDATE Camera SET delete_flag = {} WHERE CameraID = {}".format(1, id))
+        mydb.commit()
+
+        return "Update success"
+    except Exception as e:
+        print(e)
+        return "Update fail"
 
 def createEmail(userId, notificationId, email):
     try:
@@ -40,8 +50,8 @@ def createEmail(userId, notificationId, email):
         mydb.commit()
 
         return "Insert success"
-    except Exception:
-        print(Exception)
+    except Exception as e:
+        print(e)
         return "Insert fail"
 
 def getEmailById(id):
@@ -62,8 +72,8 @@ def createEvent(camId, message, datetime):
         mydb.commit()
 
         return "Insert success"
-    except Exception:
-        print(Exception)
+    except Exception as e:
+        print(e)
         return "Insert fail"
 
 def getEventById(id):
@@ -96,8 +106,8 @@ def createCamHistory(camId, filePath, datatime):
         mydb.commit()
 
         return "Insert success"
-    except Exception:
-        print(Exception)
+    except Exception as e:
+        print(e)
         return "Insert fail"
 
 def getCamHistoryById(id):
@@ -112,14 +122,23 @@ def getCamHistoryByCamId(camId):
 
     return myresult
 
-def createNotification(camId, message, datetime):
+def createNotification(userId, camId, eventId, message, datetime):
     try:
-        mycursor.execute("INSERT INTO Notification(CameraID, Message, datetime) VALUES ({}, '{}', '{}')".format(camId, message, datetime))
+        if camId is not None and eventId is not None:
+            mycursor.execute("INSERT INTO Notification(UserID, CameraID, EventID, Message, datetime) VALUES ({}, {}, {}, '{}', '{}')".format(userId, camId, eventId, message, datetime))
+        else:
+            if camId is None and eventId is None:
+                mycursor.execute("INSERT INTO Notification(UserID, CameraID, EventID, Message, datetime) VALUES ({}, null, null, '{}', '{}')".format(userId, message, datetime))
+            elif camId is None:
+                mycursor.execute("INSERT INTO Notification(UserID, CameraID, EventID, Message, datetime) VALUES ({}, null, {}, '{}', '{}')".format(userId, eventId, message, datetime))
+            else:
+                mycursor.execute("INSERT INTO Notification(UserID, CameraID, EventID, Message, datetime) VALUES ({}, {}, null, '{}', '{}')".format(userId, camId, message, datetime))
+            
         mydb.commit()
 
         return "Insert success"
-    except Exception:
-        print(Exception)
+    except Exception as e:
+        print(e)
         return "Insert fail"
 
 def getNotificationById(id):
@@ -128,8 +147,8 @@ def getNotificationById(id):
 
     return myresult
 
-def getNotificationByCamId(camId):
-    mycursor.execute("SELECT * FROM Notification WHERE CameraID =" + str(camId))
+def getNotificationByUserId(userId):
+    mycursor.execute("SELECT * FROM Notification WHERE UserID =" + str(userId))
     myresult = mycursor.fetchall()
 
     return myresult
@@ -185,10 +204,10 @@ def updateUserPassword(password, id):
 
 def deleteUser(id):
     try:
-        mycursor.execute("DELETE from User WHERE UserID =" + str(id))
+        mycursor.execute("UPDATE User SET delete_flag = {} WHERE UserID = {}".format(1, id))
         mydb.commit()
 
         return "Delete success"
-    except Exception:
-        print(Exception)
+    except Exception as e:
+        print(e)
         return "Delete fail"
