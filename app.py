@@ -13,23 +13,6 @@ def home():
     return '''<h1>Anomaly detection</h1>
                 <p>A API for interact with MySQL server</p>'''
 
-
-@app.route('/selectTable1', methods=['POST'])
-def api_id():
-    data = request.get_json()
-    # app.logger.error('%s', type(data['rgb']))
-    result = dao.get_dta_by_id(data['id'])
-    return result
-
-
-@app.route('/insertTable1', methods=['POST'])
-def insertTable1():
-    data = request.get_json()
-    # app.logger.error('%s', type(data['rgb']))
-    result = dao.innsert_to_tb1(data['name'], data['age'])
-    return result
-
-
 # get user by name
 @app.route('/get_user_by_name', methods=['POST'])
 def getUserByName():
@@ -43,7 +26,7 @@ def getUserByName():
 def createUser():
     data = request.get_json()
     # app.logger.error('%s', type(data['rgb']))
-    result = dao.createUser(data['id'] ,data['name'], data['password'], data['role'])
+    result = dao.createUser(data['name'], data['password'], data['role'])
     return result
 
 # update user name
@@ -68,6 +51,70 @@ def getAllUser():
     data = request.get_json()
     # app.logger.error('%s', type(data['rgb']))
     result = dao.getUser()
+    return result
+
+# delete user
+@app.route('/delete_user', methods=['POST'])
+def deleteUser():
+    data = request.get_json()
+    # app.logger.error('%s', type(data['rgb']))
+    result = dao.deleteUser(data['id'])
+    return result
+
+#get help by id
+@app.route('/get_help_by_id', methods=['POST'])
+def getHelpByID():
+    data = request.get_json()
+    # app.logger.error('%s', type(data['rgb']))
+    result = dao.getHelpById(data['id'])
+    return result
+
+# get all help
+@app.route('/get_all_help', methods=['POST'])
+def getAllHelp():
+    data = request.get_json()
+    # app.logger.error('%s', type(data['rgb']))
+    result = dao.getAllHelp()
+    return result
+
+# create camera
+@app.route('/add_camera', methods=['POST'])
+def addCamera():
+    data = request.get_json()
+    # app.logger.error('%s', type(data['rgb']))
+    result = dao.addCamera( data['userid'], data['cameraname'])
+    return result
+
+#get camera by id
+@app.route('/get_camera_by_id', methods=['POST'])
+def getCameraByID():
+    data = request.get_json()
+    # app.logger.error('%s', type(data['rgb']))
+    result = dao.getCameraById(data['id'])
+    return result
+
+# get camera by userID
+@app.route('/get_camera_by_userID', methods=['POST'])
+def getCameraByUserID():
+    data = request.get_json()
+    # app.logger.error('%s', type(data['rgb']))
+    result = dao.getCameraByUserId(data['id'])
+    return result
+
+#update camera name
+@app.route('/update_camera_name', methods=['POST'])
+def updateCameraName():
+    data = request.get_json()
+    # app.logger.error('%s', type(data['rgb']))
+    result = dao.updateCameraName(data['name'], data['id'])
+    return result
+
+# delete camera (update delete_flag = 1)
+@app.route('/delete_camera', methods=['POST'])
+def deleteCamera():
+    data = request.get_json()
+    # app.logger.error('%s', type(data['rgb']))
+    result = dao.deleteCamera(data['id'])
     return result
 
 

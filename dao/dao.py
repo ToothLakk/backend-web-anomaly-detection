@@ -7,10 +7,10 @@ def addCamera(userid, cameraName):
         mycursor.execute("INSERT INTO Camera(UserID, CameraName, delete_flag) VALUES ({}, '{}', {})".format(userid, cameraName, 0))
         mydb.commit()
 
-        return "Insert success"
+        return Response("Insert success", status=200, mimetype='application/json')
     except Exception as e:
         print(e)
-        return "Insert fail"
+        return Response("Insert fail", status=404, mimetype='application/json')    
 
 def getCameraById(id):
     mycursor.execute("SELECT * FROM Camera WHERE CameraID =" + str(id))
@@ -24,25 +24,25 @@ def getCameraByUserId(userId):
 
     return myresult
 
-def updateCameraName(newName):
+def updateCameraName(newName, id):
     try:
-        mycursor.execute("UPDATE Camera SET CameraName = {} WHERE CameraID = {}".format(newName, id))
+        mycursor.execute("UPDATE Camera SET CameraName = '{}' WHERE CameraID = '{}'".format(newName, id))
         mydb.commit()
 
-        return "Update success"
+        return Response("Update success", status=200, mimetype='application/json')
     except Exception as e:
         print(e)
-        return "Update fail"
+        return Response("Update fail", status=404, mimetype='application/json')
 
 def deleteCamera(id):
     try:
         mycursor.execute("UPDATE Camera SET delete_flag = {} WHERE CameraID = {}".format(1, id))
         mydb.commit()
 
-        return "Update success"
+        return Response("Delete success", status=200, mimetype='application/json')
     except Exception as e:
         print(e)
-        return "Update fail"
+        return Response("Delete fail", status=404, mimetype='application/json')
 
 def createEmail(userId, notificationId, email):
     try:
@@ -153,9 +153,9 @@ def getNotificationByUserId(userId):
 
     return myresult
 
-def createUser(id, username, password, role):
+def createUser(username, password, role):
     try:
-        mycursor.execute("INSERT INTO User(UserID, UserName, Password, Role) VALUES ('{}','{}', '{}', '{}')".format(id, username, password, role))
+        mycursor.execute("INSERT INTO User(UserName, Password, Role, delete_flag) VALUES ('{}','{}', '{}', '{}')".format(username, password, role, 0))
         mydb.commit()
 
         return Response("Insert success", status=200, mimetype='application/json')
@@ -184,12 +184,10 @@ def updateUsername(username, id):
     try:
         mycursor.execute("UPDATE user SET UserName = '{}' WHERE UserID ='{}'".format(username, id))
         mydb.commit()
-
-        #return "Update success"
+        
         return Response("Update success", status=200, mimetype='application/json')
     except Exception:
         print(Exception)
-        #return "Update fail"
         return Response("Update fail", status=404, mimetype='application/json')
 
 def updateUserPassword(password, id):
@@ -207,7 +205,7 @@ def deleteUser(id):
         mycursor.execute("UPDATE User SET delete_flag = {} WHERE UserID = {}".format(1, id))
         mydb.commit()
 
-        return "Delete success"
+        return Response("Delete success", status=200, mimetype='application/json')
     except Exception as e:
         print(e)
-        return "Delete fail"
+        return Response("Delete fail", status=404, mimetype='application/json')
